@@ -4,6 +4,8 @@
 #include <limits>
 
 #include "caffe/common.hpp"
+//added by shayan - and also some other modifications
+#include "caffe/util/my_sgemm.hpp"
 #include "caffe/util/math_functions.hpp"
 #include "caffe/util/rng.hpp"
 
@@ -35,7 +37,7 @@ template <>
 void caffe_cpu_gemv<float>(const CBLAS_TRANSPOSE TransA, const int M,
     const int N, const float alpha, const float* A, const float* x,
     const float beta, float* y) {
-  cblas_sgemv(CblasRowMajor, TransA, M, N, alpha, A, N, x, 1, beta, y, 1);
+  my_sgemv(CblasRowMajor, TransA, M, N, alpha, A, N, x, 1, beta, y, 1);
 }
 
 template <>
