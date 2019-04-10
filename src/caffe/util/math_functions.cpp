@@ -6,8 +6,10 @@
 #include "caffe/common.hpp"
 //added by shayan - and also some other modifications
 #include "caffe/util/my_sgemm.hpp"
+
 #include "caffe/util/math_functions.hpp"
 #include "caffe/util/rng.hpp"
+
 
 namespace caffe {
 
@@ -18,7 +20,9 @@ void caffe_cpu_gemm<float>(const CBLAS_TRANSPOSE TransA,
     float* C) {
   int lda = (TransA == CblasNoTrans) ? K : M;
   int ldb = (TransB == CblasNoTrans) ? N : K;
-  my_sgemm(CblasRowMajor, TransA, TransB, M, N, K, alpha, A, lda, B,
+  my_CBLAS_TRANSPOSE my_TransA = (TransA ==CblasNoTrans)?my_CblasNoTrans:my_CblasTrans;
+  my_CBLAS_TRANSPOSE my_TransB = (TransB ==CblasNoTrans)?my_CblasNoTrans:my_CblasTrans;
+  my_sgemm(my_CblasRowMajor, my_TransA, my_TransB, M, N, K, alpha, A, lda, B,
       ldb, beta, C, N);
   //cblas_sgemm(CblasRowMajor, TransA, TransB, M, N, K, alpha, A, lda, B,
     //  ldb, beta, C, N);
@@ -31,7 +35,9 @@ void caffe_cpu_gemm<double>(const CBLAS_TRANSPOSE TransA,
     double* C) {
   int lda = (TransA == CblasNoTrans) ? K : M;
   int ldb = (TransB == CblasNoTrans) ? N : K;
-  my_dgemm(CblasRowMajor, TransA, TransB, M, N, K, alpha, A, lda, B,
+  my_CBLAS_TRANSPOSE my_TransA = (TransA ==CblasNoTrans)?my_CblasNoTrans:my_CblasTrans;
+  my_CBLAS_TRANSPOSE my_TransB = (TransB ==CblasNoTrans)?my_CblasNoTrans:my_CblasTrans;
+  my_dgemm(my_CblasRowMajor, my_TransA, my_TransB, M, N, K, alpha, A, lda, B,
       ldb, beta, C, N);
 }
 
