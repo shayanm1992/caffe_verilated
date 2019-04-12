@@ -35,18 +35,38 @@
 
 //it is always CBLASROWMAJOT in caffe calls
 
-void s_worker(void *arg) {
+int g_M, g_N, g_K;
+float g_alpha, g_beta;
+const float *g_A;
+const float *g_B;
+float *g_C;
+float *g_result;
+my_CBLAS_TRANSPOSE g_TransA, g_TransB;
+
+int g_dM, g_dN, g_dK;
+double g_dalpha, g_dbeta;
+const double *g_dA;
+const double *g_dB;
+double *g_dC;
+double *g_dresult;
+my_CBLAS_TRANSPOSE g_dTransA, g_dTransB;
+
+static bool made_tops = false;
+static Vtop *tops[NUM_THREADS];
+
+void *s_worker(void *arg) {
     int worker_id = *(int *)arg;
     int chunk_height = g_M / NUM_THREADS;
     int m_start = worker_id * chunk_height;
     int m_end = (worker_id + 1) * chunk_height;
+    int mult_result;
 
     if (worker_id == NUM_THREADS - 1) {
         // last thread, so pick up the extra work caused by M % NUM_THREADS != 0
         m_end = g_M;
     }
 
-    Vtop* top = new Vtop;
+    Vtop *top = tops[worker_id];
 
     //no transpose
     if (g_TransA== my_CblasNoTrans && g_TransB == my_CblasNoTrans) {
@@ -56,13 +76,13 @@ void s_worker(void *arg) {
                 for (int k = 0; k < g_K; k++) {
                     //result[N*m + n] += A[K*m + k] * B[N*k + n];
                     //added to test verilator MULT
-                    fixed_point<short, 8> fa=A[g_K*m + k];
-                    fixed_point<short, 8> fb=B[g_N*k + n];
+                    fixed_point<short, 8> fa=g_A[g_K*m + k];
+                    fixed_point<short, 8> fb=g_B[g_N*k + n];
 
-                    top2->a = fa.raw_data();
-                    top2->b = fb.raw_data();
-                    top2->eval();
-                    mult_result=top2->r;
+                    top->a = fa.raw_data();
+                    top->b = fb.raw_data();
+                    top->eval();
+                    mult_result=top->r;
                     g_result [g_N*m + n] += (float)mult_result / (float)(1 << (fa.numShifts + fb.numShifts));
                 }
                 g_result[g_N*m + n] = g_alpha * g_result[g_N*m + n] + g_beta * g_C[g_N*m + n];
@@ -77,13 +97,13 @@ void s_worker(void *arg) {
                 g_result[g_N*m + n] = 0;
                 for (int k = 0; k < g_K; k++) {
                     //	result[N*m + n] += A[K*m + k] * B[K*n + k];
-                    fixed_point<short, 8> fa=A[g_K*m + k];
-                    fixed_point<short, 8> fb=B[g_K*n + k];
+                    fixed_point<short, 8> fa=g_A[g_K*m + k];
+                    fixed_point<short, 8> fb=g_B[g_K*n + k];
 
-                    top2->a = fa.raw_data();
-                    top2->b = fb.raw_data();
-                    top2->eval();
-                    mult_result=top2->r;
+                    top->a = fa.raw_data();
+                    top->b = fb.raw_data();
+                    top->eval();
+                    mult_result=top->r;
                     g_result [g_N*m + n] += (float)mult_result / (float)(1 << (fa.numShifts + fb.numShifts));
                 }
 
@@ -100,13 +120,13 @@ void s_worker(void *arg) {
                 g_result[g_N*m + n] = 0;
                 for (int k = 0; k < g_K; k++) {
                     //result[N*m + n] += A[M*k + m] * B[N*k + n];
-                    fixed_point<short, 8> fa=A[g_M*k + m];
-                    fixed_point<short, 8> fb=B[g_N*k + n];
+                    fixed_point<short, 8> fa=g_A[g_M*k + m];
+                    fixed_point<short, 8> fb=g_B[g_N*k + n];
 
-                    top2->a = fa.raw_data();
-                    top2->b = fb.raw_data();
-                    top2->eval();
-                    mult_result=top2->r;
+                    top->a = fa.raw_data();
+                    top->b = fb.raw_data();
+                    top->eval();
+                    mult_result=top->r;
                     g_result [g_N*m + n] += (float)mult_result / (float)(1 << (fa.numShifts + fb.numShifts));
                 }
                 g_result[g_N*m + n] = g_alpha * g_result[g_N*m + n] + g_beta * g_C[g_N*m + n];
@@ -122,13 +142,13 @@ void s_worker(void *arg) {
                 g_result[g_N*m + n] = 0;
                 for (int k = 0; k < g_K; k++) {
                     //result[N*m + n] += A[M*k + m] * B[K*n + k];
-                    fixed_point<short, 8> fa=A[g_M*k + m];
-                    fixed_point<short, 8> fb=B[g_K*n + k];
+                    fixed_point<short, 8> fa=g_A[g_M*k + m];
+                    fixed_point<short, 8> fb=g_B[g_K*n + k];
 
-                    top2->a = fa.raw_data();
-                    top2->b = fb.raw_data();
-                    top2->eval();
-                    mult_result=top2->r;
+                    top->a = fa.raw_data();
+                    top->b = fb.raw_data();
+                    top->eval();
+                    mult_result=top->r;
                     g_result [g_N*m + n] += (float)mult_result / (float)(1 << (fa.numShifts + fb.numShifts));
                 }
                 g_result[g_N*m + n] = g_alpha * g_result[g_N*m + n] + g_beta * g_C[g_N*m + n];
@@ -138,21 +158,22 @@ void s_worker(void *arg) {
     }
 
     delete top;
-    return;
+    return NULL;
 }
 
-void d_worker(void *arg) {
+void *d_worker(void *arg) {
     int worker_id = *(int *)arg;
     int chunk_height = g_dM / NUM_THREADS;
     int m_start = worker_id * chunk_height;
     int m_end = (worker_id + 1) * chunk_height;
+    int mult_result;
 
     if (worker_id == NUM_THREADS - 1) {
         // last thread, so pick up the extra work caused by M % NUM_THREADS != 0
         m_end = g_dM;
     }
 
-    Vtop* top = new Vtop;
+    Vtop *top = tops[worker_id];
 
     //no transpose
     if (g_dTransA== my_CblasNoTrans && g_dTransB == my_CblasNoTrans) {
@@ -162,13 +183,13 @@ void d_worker(void *arg) {
                 for (int k = 0; k < g_dK; k++) {
                     //result[N*m + n] += A[K*m + k] * B[N*k + n];
                     //added to test verilator MULT
-                    fixed_point<short, 8> fa=A[g_dK*m + k];
-                    fixed_point<short, 8> fb=B[g_dN*k + n];
+                    fixed_point<short, 8> fa=g_dA[g_dK*m + k];
+                    fixed_point<short, 8> fb=g_dB[g_dN*k + n];
 
-                    top2->a = fa.raw_data();
-                    top2->b = fb.raw_data();
-                    top2->eval();
-                    mult_result=top2->r;
+                    top->a = fa.raw_data();
+                    top->b = fb.raw_data();
+                    top->eval();
+                    mult_result=top->r;
                     g_dresult [g_dN*m + n] += (double)mult_result / (double)(1 << (fa.numShifts + fb.numShifts));
                 }
                 g_dresult[g_dN*m + n] = g_dalpha * g_dresult[g_dN*m + n] + g_dbeta * g_dC[g_dN*m + n];
@@ -183,13 +204,13 @@ void d_worker(void *arg) {
                 g_dresult[g_dN*m + n] = 0;
                 for (int k = 0; k < g_dK; k++) {
                     //	result[N*m + n] += A[K*m + k] * B[K*n + k];
-                    fixed_point<short, 8> fa=A[g_dK*m + k];
-                    fixed_point<short, 8> fb=B[g_dK*n + k];
+                    fixed_point<short, 8> fa=g_dA[g_dK*m + k];
+                    fixed_point<short, 8> fb=g_dB[g_dK*n + k];
 
-                    top2->a = fa.raw_data();
-                    top2->b = fb.raw_data();
-                    top2->eval();
-                    mult_result=top2->r;
+                    top->a = fa.raw_data();
+                    top->b = fb.raw_data();
+                    top->eval();
+                    mult_result=top->r;
                     g_dresult [g_dN*m + n] += (double)mult_result / (double)(1 << (fa.numShifts + fb.numShifts));
                 }
 
@@ -206,13 +227,13 @@ void d_worker(void *arg) {
                 g_dresult[g_dN*m + n] = 0;
                 for (int k = 0; k < g_dK; k++) {
                     //result[N*m + n] += A[M*k + m] * B[N*k + n];
-                    fixed_point<short, 8> fa=A[g_dM*k + m];
-                    fixed_point<short, 8> fb=B[g_dN*k + n];
+                    fixed_point<short, 8> fa=g_dA[g_dM*k + m];
+                    fixed_point<short, 8> fb=g_dB[g_dN*k + n];
 
-                    top2->a = fa.raw_data();
-                    top2->b = fb.raw_data();
-                    top2->eval();
-                    mult_result=top2->r;
+                    top->a = fa.raw_data();
+                    top->b = fb.raw_data();
+                    top->eval();
+                    mult_result=top->r;
                     g_dresult [g_dN*m + n] += (double)mult_result / (double)(1 << (fa.numShifts + fb.numShifts));
                 }
                 g_dresult[g_dN*m + n] = g_dalpha * g_dresult[g_dN*m + n] + g_dbeta * g_dC[g_dN*m + n];
@@ -228,13 +249,13 @@ void d_worker(void *arg) {
                 g_dresult[g_dN*m + n] = 0;
                 for (int k = 0; k < g_dK; k++) {
                     //result[N*m + n] += A[M*k + m] * B[K*n + k];
-                    fixed_point<short, 8> fa=A[g_dM*k + m];
-                    fixed_point<short, 8> fb=B[g_dK*n + k];
+                    fixed_point<short, 8> fa=g_dA[g_dM*k + m];
+                    fixed_point<short, 8> fb=g_dB[g_dK*n + k];
 
-                    top2->a = fa.raw_data();
-                    top2->b = fb.raw_data();
-                    top2->eval();
-                    mult_result=top2->r;
+                    top->a = fa.raw_data();
+                    top->b = fb.raw_data();
+                    top->eval();
+                    mult_result=top->r;
                     g_dresult [g_dN*m + n] += (double)mult_result / (double)(1 << (fa.numShifts + fb.numShifts));
                 }
                 g_dresult[g_dN*m + n] = g_dalpha * g_dresult[g_dN*m + n] + g_dbeta * g_dC[g_dN*m + n];
@@ -244,13 +265,9 @@ void d_worker(void *arg) {
     }
 
     delete top;
-    return;
+    return NULL;
 }
 
-int g_M, g_N, g_K;
-float g_alpha, g_beta;
-float *g_C, g_result;
-my_CBLAS_TRANSPOSE g_TransA, g_TransB;
 void my_sgemm(my_CBLAS_LAYOUT layout, my_CBLAS_TRANSPOSE TransA,
         my_CBLAS_TRANSPOSE TransB, const int M, const int N,
         const int K, const float alpha, const float *A,
@@ -265,31 +282,34 @@ void my_sgemm(my_CBLAS_LAYOUT layout, my_CBLAS_TRANSPOSE TransA,
     g_K = K;
     g_alpha = alpha;
     g_beta = beta;
+    g_A = A;
+    g_B = B;
     g_C = C;
     g_TransA = TransA;
     g_TransB = TransB;
 
     g_result= new float [M*N];
 
-    threads = (pthread_t *) malloc(NUM_THREADS * sizeof(pthread_t));
-    for ( i = 0; i < NUM_THREADS; ++i ) {
+
+
+    pthread_t *threads = (pthread_t *) malloc(NUM_THREADS * sizeof(pthread_t));
+    for (int i = 0; i < NUM_THREADS; ++i ) {
         int *worker_id;
         worker_id = (int *) malloc(sizeof(int));
         *worker_id = i;
-        pthread_create( &threads[i], NULL, s_worker, (void *)worker_id);
+	if (!made_tops) 
+		tops[i] = new Vtop();
+
+        pthread_create(&threads[i], NULL, s_worker, (void *)worker_id);
     }
 
-    for ( i = 0; i < NUM_THREADS; ++i ) {
+    for (int i = 0; i < NUM_THREADS; ++i ) {
         pthread_join(threads[i], NULL);
     }
 
     return;
 }
 
-int g_dM, g_dN, g_dK;
-double g_dalpha, g_dbeta;
-double *g_dC, g_dresult;
-my_CBLAS_TRANSPOSE g_dTransA, g_dTransB;
 void my_dgemm(my_CBLAS_LAYOUT layout, my_CBLAS_TRANSPOSE TransA,
         my_CBLAS_TRANSPOSE TransB, const int M, const int N,
         const int K, const double alpha, const double *A,
@@ -304,21 +324,26 @@ void my_dgemm(my_CBLAS_LAYOUT layout, my_CBLAS_TRANSPOSE TransA,
     g_dK = K;
     g_dalpha = alpha;
     g_dbeta = beta;
+    g_dA = A;
+    g_dB = B;
     g_dC = C;
     g_dTransA = TransA;
     g_dTransB = TransB;
 
     g_dresult= new double [M*N];
 
-    threads = (pthread_t *) malloc(NUM_THREADS * sizeof(pthread_t));
-    for ( i = 0; i < NUM_THREADS; ++i ) {
+    pthread_t *threads = (pthread_t *) malloc(NUM_THREADS * sizeof(pthread_t));
+    for (int i = 0; i < NUM_THREADS; ++i ) {
         int *worker_id;
         worker_id = (int *) malloc(sizeof(int));
         *worker_id = i;
-        pthread_create( &threads[i], NULL, d_worker, (void *)worker_id);
+	if (!made_tops) 
+		tops[i] = new Vtop();
+
+        pthread_create(&threads[i], NULL, d_worker, (void *)worker_id);
     }
 
-    for ( i = 0; i < NUM_THREADS; ++i ) {
+    for (int i = 0; i < NUM_THREADS; ++i ) {
         pthread_join(threads[i], NULL);
     }
 
