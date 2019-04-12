@@ -15,7 +15,7 @@ g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator
 
 
 
-#g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVL_PRINTF=printf -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=0 -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow      -MMD -MP  -DVL_DEBUG=1 -std=c++11  -c -o verilated.o /usr/local/share/verilator/include/verilated.cpp
+#g++  -I.  -MMD -I/usr/local/share/verilator/include -I/usr/local/share/verilator/include/vltstd -DVL_PRINTF=printf -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TRACE=0 -Wno-sign-compare -Wno-uninitialized -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -Wno-shadow      -MMD -MP  -fPIC -DVL_DEBUG=1 -std=c++11  -c -o verilated.o /usr/local/share/verilator/include/verilated.cpp
 
 
 /usr/bin/perl /usr/local/share/verilator/bin/verilator_includer -DVL_INCLUDE_OPT=include Vtop.cpp Vtop_unsignedArrayMultiplier8.cpp > Vtop__ALLcls.cpp

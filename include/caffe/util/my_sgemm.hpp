@@ -19,7 +19,27 @@ void my_dgemm(my_CBLAS_LAYOUT, my_CBLAS_TRANSPOSE,
 
 float my_add(float, float);
 
+template <class BaseType, size_t FracDigits>
+class fixed_point {
+public:
+    const static BaseType factor = 1 << FracDigits;
+    const static int numShifts = FracDigits;
 
+    BaseType data;
+
+    fixed_point(double d) {
+        *this = d; // calls operator=
+    }
+
+    fixed_point& operator=(double d) {
+        data = static_cast<BaseType>(d*factor);
+        return *this;
+    }
+
+    BaseType raw_data() const {
+        return data;
+    }
+};
 
 
 #endif

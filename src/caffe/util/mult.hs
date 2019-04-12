@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <string>
 #include <array>
-//#include "verilated.h"
+#include "verilated.h"
 #include "Vtop.h"
 
 // Execute arbitraty command line and return std out
@@ -38,7 +38,7 @@ int calculate_mult(short a , short b){
     short test;
 	
     // Final model cleanup
-    //top2->final();
+    top2->final();
     // Destroy model
     int r= top2->r;    
     delete top2;
@@ -74,12 +74,10 @@ static float our_mult(int number, float* a, float* b) {
   // Speed up a little
   // if (*a == 0 || *b == 0)
   //   return 0;
-  float x[2];
-  fixed_point<short, 6> fa = x[0];
-  fixed_point<short, 6> fb = x[1];
+  
   // convert inputs to fixed point
-   fa = a[0];
-   fb = b[0];
+  fixed_point<short, 6> fa = a[0];
+  fixed_point<short, 6> fb = b[0];
   short NN=number;
 	
   // do integer multiplication
