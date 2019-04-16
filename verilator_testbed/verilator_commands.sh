@@ -1,5 +1,6 @@
 verilator  -cc --exe -O2 -x-assign 0 -Wno-lint -Wno-UNOPTFLAT -f input.vc top.v sim_main.cpp
-
+#threaded
+#verilator  -cc --exe --threads 6 -O2 -x-assign 0 -Wno-lint -Wno-UNOPTFLAT -f input.vc top.v sim_main.cpp
 
 #make -j 4 -C obj_dir -f ../Makefile_obj
 

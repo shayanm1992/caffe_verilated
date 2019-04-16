@@ -11,19 +11,11 @@
 #include "verilated.h"
 
 class Vtop__Syms;
-class Vtop_unsignedArrayMultiplier8;
 
 //----------
 
 VL_MODULE(Vtop) {
   public:
-    // CELLS
-    // Public to allow access to /*verilator_public*/ items;
-    // otherwise the application code can consider these internals.
-    Vtop_unsignedArrayMultiplier8*	__PVT__top__DOT__U1__DOT__ll;
-    Vtop_unsignedArrayMultiplier8*	__PVT__top__DOT__U1__DOT__hl;
-    Vtop_unsignedArrayMultiplier8*	__PVT__top__DOT__U1__DOT__lh;
-    Vtop_unsignedArrayMultiplier8*	__PVT__top__DOT__U1__DOT__hh;
     
     // PORTS
     // The application code writes and reads these signals to
@@ -36,130 +28,10 @@ VL_MODULE(Vtop) {
     // LOCAL SIGNALS
     // Internals; generally not touched by application code
     // Begin mtask footprint  all: 
-    VL_SIG16(top__DOT__a_temp,15,0);
-    VL_SIG16(top__DOT__b_temp,15,0);
     VL_SIG(top__DOT__r_temp,31,0);
     
     // LOCAL VARIABLES
     // Internals; generally not touched by application code
-    // Anonymous structures to workaround compiler member-count bugs
-    struct {
-	// Begin mtask footprint  all: 
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__ll__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__ll__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__ll__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__ll__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__ll__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__ll__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hl__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hl__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hl__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hl__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hl__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hl__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__lh__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__lh__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__lh__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__lh__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__lh__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__lh__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hh__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hh__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hh__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hh__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hh__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__ll__hh__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__ll__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__ll__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__ll__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__ll__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__ll__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__ll__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hl__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hl__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hl__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hl__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hl__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hl__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__lh__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__lh__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__lh__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__lh__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__lh__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__lh__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hh__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hh__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hh__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hh__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hh__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hl__hh__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__ll__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__ll__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__ll__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__ll__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__ll__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__ll__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hl__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hl__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hl__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hl__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hl__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hl__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__lh__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__lh__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__lh__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__lh__DOT____Vcellout__fa04____pinNumber1,0,0);
-    };
-    struct {
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__lh__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__lh__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hh__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hh__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hh__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hh__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hh__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__lh__hh__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__ll__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__ll__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__ll__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__ll__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__ll__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__ll__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hl__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hl__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hl__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hl__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hl__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hl__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__lh__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__lh__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__lh__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__lh__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__lh__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__lh__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hh__DOT____Vcellout__fa03____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hh__DOT____Vcellout__fa03____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hh__DOT____Vcellout__fa04____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hh__DOT____Vcellout__fa04____pinNumber1,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hh__DOT____Vcellout__fa06____pinNumber2,0,0);
-	VL_SIG8(__Vchglast__TOP__top__DOT__U1__DOT__hh__hh__DOT____Vcellout__fa07____pinNumber2,0,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__ll__ll__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__ll__hl__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__ll__lh__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__ll__hh__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__hl__ll__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__hl__hl__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__hl__lh__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__hl__hh__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__lh__ll__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__lh__hl__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__lh__lh__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__lh__hh__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__hh__ll__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__hh__hl__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__hh__lh__DOT__C,10,0);
-	VL_SIG16(__Vchglast__TOP__top__DOT__U1__DOT__hh__hh__DOT__C,10,0);
-    };
     
     // INTERNAL VARIABLES
     // Internals; generally not touched by application code
@@ -194,7 +66,6 @@ VL_MODULE(Vtop) {
     static QData _change_request(Vtop__Syms* __restrict vlSymsp);
   public:
     static void _combo__TOP__1(Vtop__Syms* __restrict vlSymsp);
-    static void _combo__TOP__2(Vtop__Syms* __restrict vlSymsp);
   private:
     void _ctor_var_reset();
   public:

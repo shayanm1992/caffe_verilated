@@ -1,10 +1,10 @@
-caffe_root='/home/vlsi_lab/Caffe/'
+caffe_root='/home/vlsi_lab/Caffe_modified_verilator/'
 
 #import imp
 #caffe_verilator=imp.load_source('caffe','/home/vlsi_lab/Caffe_modified/python/caffe')
 import sys
-sys.path.append(caffe_root+'/python')
- 
+#sys.path.append(caffe_root+'/python')
+sys.path.insert(1, caffe_root+'/python') 
 import caffe as caffe_verilator
 import numpy as np
 import matplotlib.pyplot as plt
@@ -42,7 +42,7 @@ net=caffe_verilator.Net(caffe_root+'examples/mnist/lenet_test.prototxt',\
 #img=img.resize((28,28))
 #im=np.array(img)
 #read image from mnist
-for i in range(1,2):
+for i in range(1,20):
     print (i)
     img=train_data[i,:].reshape((28,28))
     plt.imshow(img)
@@ -72,21 +72,20 @@ bias_data=np.array(a.blobs[1].data)
 intermediate_feature=net.blobs['ip2'].data
 
 
-#find CCR
-test_set_size=10000
-wrong_classify_count=0;
-for i in range (0,test_set_size):
-    img=test_data[i,:].reshape((28,28))
-    im_input = img[np.newaxis, np.newaxis, :, :]
-    net.blobs['data'].data[...] = im_input
-    results=net.forward()
-    results_array=results['loss']
-    if np.argmax(results_array)!=test_label[i]:
-        wrong_classify_count=wrong_classify_count+1
-print ('CCR for '+caffe_root+' = '+str(100-float(wrong_classify_count)/float(test_set_size)*100))
+#mnist data lmdb
+import lmdb
+data_path= "./examples/mnist/mnist_train_lmdb"
+lmdb_env=lmdb.open(data_path,readonly=True)
+lmdb_txn = lmdb_env.begin()
+lmdb_cursor = lmdb_txn.cursor()
+datum = caffe_verilator.proto.caffe_pb2.Datum()
 
-
-
+for key, value in lmdb_cursor:
+    datum.ParseFromString(value)
+    label = datum.label
+    data = caffe_verilator.io.datum_to_array(datum)
+    for l, d in zip(label, data):
+            print l, d
 
 
 

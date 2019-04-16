@@ -10,7 +10,6 @@
 
 // INCLUDE MODULE CLASSES
 #include "Vtop.h"
-#include "Vtop_unsignedArrayMultiplier8.h"
 
 // SYMS CLASS
 class Vtop__Syms : public VerilatedSyms {
@@ -22,10 +21,6 @@ class Vtop__Syms : public VerilatedSyms {
     
     // SUBCELL STATE
     Vtop*                          TOPp;
-    Vtop_unsignedArrayMultiplier8  TOP__top__DOT__U1__DOT__hh;
-    Vtop_unsignedArrayMultiplier8  TOP__top__DOT__U1__DOT__hl;
-    Vtop_unsignedArrayMultiplier8  TOP__top__DOT__U1__DOT__lh;
-    Vtop_unsignedArrayMultiplier8  TOP__top__DOT__U1__DOT__ll;
     
     // CREATORS
     Vtop__Syms(Vtop* topp, const char* namep);

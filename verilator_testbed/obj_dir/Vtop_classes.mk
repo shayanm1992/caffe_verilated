@@ -16,7 +16,6 @@ VM_TRACE = 0
 # Generated module classes, fast-path, compile with highest optimization
 VM_CLASSES_FAST += \
 	Vtop \
-	Vtop_unsignedArrayMultiplier8 \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
